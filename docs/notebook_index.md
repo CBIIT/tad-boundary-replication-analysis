@@ -1,0 +1,187 @@
+# Notebook index
+
+This file summarizes the analysis notebooks included in the repository. It is generated from headings, code-chunk labels, and package calls in the uploaded source files.
+
+## `analyses/figure3_cell_cycle_boundary_distance/230918-ETB078-FISH-EdU-Opt3.qmd`
+
+- Title: Cell Cycle Arrest Experiment Optimization
+- Libraries: `SpatialTools`, `data.table`, `fs`, `ggthemes`, `mclust`, `paint`, `tidyverse`
+- Sources helper scripts: `funcs/plotting.R`
+- Main headings:
+  -     Image acquisition and analysis conditions
+  -     Read Experimental Metadata
+  -     Read single cell data
+  -     Read single spot level data
+  -     Spots per cell plots
+  -     Spot Filtering
+  -     Red/FarRed Spot Distances Calculations
+  -     DAPI Histograms
+  -     DAPI Cell Cycle Normalization
+  -     DAPI and EdU Cell Cycle Normalization
+  -     CC Phase FISH Spot-to-Spot distances
+- Labeled code chunks:
+  - line 15: `load-packages`
+  - line 30: `set-theme`
+  - line 56: `read-plate-layout`
+  - line 72: `sync-layout`
+  - line 88: `read-cell-data`
+  - line 161: `read-spot-data`
+  - line 191: `calc-n-spots`
+  - line 208: `n-green-spots`
+  - line 224: `n-red-spots`
+  - line 270: `calc-green-red-dist`
+  - line 296: `calc-min-dist`
+  - line 317: `summarize-wells`
+  - line 350: `dapi-histogram`
+  - line 393: `cc-norm`
+  - line 397: `cc-norm`
+  - line 416: `cc-dot-plot`
+  - line 462: `cc-phases-dotplot`
+  - line 480: `cc-phases-perc-bar`
+  - line 516: `cc-fish-dist`
+  - line 534: `session-info`
+- File patterns used:
+  - `*nuclei_information_well*.csv`
+  - `*spots_locations_well*.csv`
+- Written outputs:
+  - `output/per_well_measurements.csv`
+
+## `analyses/figure3_cell_cycle_boundary_distance/legacy/211101-ETB016-Myc-Chr22-FISH-mAID-HCT116-QnD.Rmd`
+
+- Title: TADs Relaxation upon induced RAD21 Degradation in HCT116 Cells
+- Libraries: `SpatialTools`, `data.table`, `fs`, `ggpointdensity`, `ggthemes`, `reshape2`, `tidyverse`
+- Sources helper scripts: `R/Plotters.R`
+- Main headings:
+  -     Image acquisition and analysis conditions
+  -     Set Experimental Treatments metadata
+  -     Read Object Level Data
+  -     Spot Filtering
+  -     Red/FarRed Spot Distances Calculations
+  -     Single Allele Distances Distributions
+- Labeled code chunks:
+  - line 8: `load-libraries`
+  - line 26: `set-options`
+  - line 51: `set-resolution`
+  - line 60: `plate-layout`
+  - line 71: `treatment-layout`
+  - line 79: `probeset-layout`
+  - line 94: `set-glob`
+  - line 101: `read-cells`
+  - line 122: `read-spots`
+  - line 149: `calc-n-spots`
+  - line 162: `n-red-spots`
+  - line 174: `n-farred-spots`
+  - line 216: `calc-spot-dist`
+  - line 240: `proximityR-G`
+  - line 252: `pooled-sgRNA-gr-density`
+  - line 266: `single-sgRNA-fr-density`
+  - line 280: `sessionInfo`
+- File patterns used:
+  - `data*/well_nuclei_results/*.csv`
+  - `data*/well_spots_locations/*.csv`
+
+## `analyses/figure3_cell_cycle_boundary_distance/legacy/230124-CENPC-EdU-Cell-cycle.qmd`
+
+- Title: Cell Cycle Analysis validation with Aphidicolin and RO-3306
+- Libraries: `data.table`, `fs`, `ggthemes`, `mclust`, `tidyverse`
+- Sources helper scripts: `funcs/plotting.R`
+- Main headings:
+  -     Image acquisition and analysis conditions
+  -     Read Experimental Metadata
+  -     Read single cell data
+  -     Heatmaps
+  -     DAPI Histograms
+  -     DAPI Cell Cycle Normalization
+  -     DAPI and EdU Cell Cycle Normalization
+- Labeled code chunks:
+  - line 15: `load-packages`
+  - line 28: `set-theme`
+  - line 53: `read-metadata`
+  - line 65: `cell-line-layout`
+  - line 77: `compound-layout`
+  - line 89: `compound-conc-layout`
+  - line 159: `nucleus_n_heatmap`
+  - line 173: `area_heatmap`
+  - line 185: `dapi_int_sum_heatmap`
+  - line 197: `edu_int_mean_heatmap`
+  - line 211: `cc-RPE1`
+  - line 223: `cc-RPE1-controls`
+  - line 235: `cc-HCT116`
+  - line 247: `cc-HCT116-controls`
+  - line 259: `cenpc-n-RPE1`
+  - line 271: `cenpc-n-HCT116`
+  - line 283: `k-clust-RPE1`
+  - line 295: `k-clust-HCT116`
+  - line 332: `sel-wells-cc-norm`
+  - line 484: `session-info`
+- File patterns used:
+  - `*.csv`
+
+## `analyses/miniscreen_pilot/210521-MiniScreen.Rmd`
+
+- Title: FISH 2D Distance/210521 Cohesin Complex sgRNA Miniscreen
+- Libraries: `SpatialTools`, `data.table`, `fs`, `reshape2`, `tidyverse`
+- Main headings:
+  -     Experimental conditions
+  -     Image acquisition and analysis conditions
+  -     Define Metadata
+  -     Read Object Level Data
+- Labeled code chunks:
+  - line 8: `load-libraries`
+  - line 31: `set-options`
+  - line 76: `set-glob`
+  - line 83: `read-cells`
+  - line 110: `read-green-spots`
+  - line 135: `read-red-spots`
+  - line 174: `n-green-spots`
+  - line 185: `n-red-spots`
+  - line 196: `cell-count`
+  - line 217: `calc-spot-dist-2D`
+  - line 239: `calc-spot-dist-3D`
+  - line 260: `proximity-red-green`
+  - line 273: `sgrna-gr-2D-density`
+  - line 290: `sgrna-gr-3D-density`
+  - line 307: `sgrna-gr-3D-histogram`
+  - line 325: `z-histogram`
+  - line 336: `sessionInfo`
+- File patterns used:
+  - `data/*Nuclei Final[0].txt`
+  - `data/*Spots 488[1].txt`
+  - `data/*Spots 561[2].txt`
+
+## `analyses/miniscreen_pilot/Columbus_3D.Rmd`
+
+- Title: FISH_3D_Distance
+- Libraries: `SpatialTools`, `data.table`, `ggplot2`, `knitr`, `plyr`, `reshape2`, `stringr`
+- Main headings:
+  -     Read the Object Level Data
+  -     Process the object-level data
+  -     Calculate Minimum Distances and Paired Red Spots Events.
+  -     Graphical Exploratory Data Analysis and Calculations
+- Labeled code chunks:
+  - line 24: `setResolution`
+  - line 32: `regexFilename`
+  - line 46: `patList`
+  - line 51: `directorySearch`
+  - line 60: `trimNames`
+  - line 71: `readMerge`
+  - line 82: `deleteDtList`
+  - line 97: `renameVariables`
+  - line 187: `addColorIndex`
+  - line 195: `dimensionTransform`
+  - line 210: `setKeys`
+  - line 222: `innerJoin`
+  - line 255: `selectDistances`
+  - line 262: `SpotDist`
+  - line 295: `proximityR-G`
+  - line 329: `setThemeandPalette`
+  - line 354: `gSpotsNumber`
+  - line 366: `rSpotsNumber`
+  - line 378: `fSpotsNumber`
+  - line 389: `thresholdSet`
+  - line 395: `grHist2D`
+  - line 407: `grHist3D`
+  - line 421: `frHist2D`
+  - line 433: `frHist3D`
+  - line 445: `spotMap`
+  - line 463: `sessionInfo`

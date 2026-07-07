@@ -1,0 +1,255 @@
+path	size_bytes
+.gitattributes	162
+.gitignore	644
+CITATION.cff	1544
+LICENSE_NOTE.md	346
+README.md	5834
+analyses/figure3_cell_cycle_boundary_distance/.Rprofile	26
+analyses/figure3_cell_cycle_boundary_distance/230918-ETB078-FISH-EdU-Opt3.Rproj	205
+analyses/figure3_cell_cycle_boundary_distance/230918-ETB078-FISH-EdU-Opt3.html	6035208
+analyses/figure3_cell_cycle_boundary_distance/230918-ETB078-FISH-EdU-Opt3.qmd	13686
+analyses/figure3_cell_cycle_boundary_distance/README.md	2987
+analyses/figure3_cell_cycle_boundary_distance/data/.gitkeep	0
+analyses/figure3_cell_cycle_boundary_distance/data/README.md	1066
+analyses/figure3_cell_cycle_boundary_distance/funcs/plotting.R	4582
+analyses/figure3_cell_cycle_boundary_distance/legacy/211101-ETB016-Myc-Chr22-FISH-mAID-HCT116-QnD.Rmd	8127
+analyses/figure3_cell_cycle_boundary_distance/legacy/230124-CENPC-EdU-Cell-cycle.qmd	12882
+analyses/figure3_cell_cycle_boundary_distance/legacy/README.md	557
+analyses/figure3_cell_cycle_boundary_distance/metadata/ETB078_FISH_EdU_Platelayout.xlsx	16548
+analyses/figure3_cell_cycle_boundary_distance/metadata/plate_layout.csv	2449
+analyses/figure3_cell_cycle_boundary_distance/output/per_well_measurements.csv	6139
+analyses/figure3_cell_cycle_boundary_distance/renv/activate.R	32831
+analyses/figure3_cell_cycle_boundary_distance/renv/settings.json	412
+analyses/figure3_cell_cycle_boundary_distance/renv.lock	38217
+analyses/miniscreen_pilot/.Rprofile	26
+analyses/miniscreen_pilot/210521-MiniScreen.Rmd	10185
+analyses/miniscreen_pilot/210521-MiniScreen.Rproj	205
+analyses/miniscreen_pilot/210521-MiniScreen.html	2908191
+analyses/miniscreen_pilot/Columbus_3D.Rmd	16892
+analyses/miniscreen_pilot/README.md	2240
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[798778].analysis.aas	1475952
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.1.txt	16927
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.A3[807539].Population - Nuclei Final[0].txt	125002
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.A3[807539].Population - Spots 488[1].txt	249781
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.A3[807539].Population - Spots 561[2].txt	208166
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.A4[807542].Population - Nuclei Final[0].txt	190388
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.A4[807542].Population - Spots 488[1].txt	370937
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.A4[807542].Population - Spots 561[2].txt	315879
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.A5[807545].Population - Nuclei Final[0].txt	161093
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.A5[807545].Population - Spots 488[1].txt	368204
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.A5[807545].Population - Spots 561[2].txt	322531
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.A6[807548].Population - Nuclei Final[0].txt	136283
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.A6[807548].Population - Spots 488[1].txt	341592
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.A6[807548].Population - Spots 561[2].txt	314787
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.B3[807551].Population - Nuclei Final[0].txt	139894
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.B3[807551].Population - Spots 488[1].txt	424503
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.B3[807551].Population - Spots 561[2].txt	412571
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.B4[807554].Population - Nuclei Final[0].txt	99928
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.B4[807554].Population - Spots 488[1].txt	291868
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.B4[807554].Population - Spots 561[2].txt	277784
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.B5[807557].Population - Nuclei Final[0].txt	66009
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.B5[807557].Population - Spots 488[1].txt	196974
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.B5[807557].Population - Spots 561[2].txt	194054
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.B6[807560].Population - Nuclei Final[0].txt	54565
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.B6[807560].Population - Spots 488[1].txt	157546
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.B6[807560].Population - Spots 561[2].txt	158516
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.C3[807563].Population - Nuclei Final[0].txt	132121
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.C3[807563].Population - Spots 488[1].txt	415217
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.C3[807563].Population - Spots 561[2].txt	411047
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.C4[807566].Population - Nuclei Final[0].txt	129084
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.C4[807566].Population - Spots 488[1].txt	394631
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.C4[807566].Population - Spots 561[2].txt	389128
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.C5[807569].Population - Nuclei Final[0].txt	67726
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.C5[807569].Population - Spots 488[1].txt	218834
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.C5[807569].Population - Spots 561[2].txt	208546
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.C6[807572].Population - Nuclei Final[0].txt	53730
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.C6[807572].Population - Spots 488[1].txt	167912
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.C6[807572].Population - Spots 561[2].txt	165172
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.D3[807575].Population - Nuclei Final[0].txt	106853
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.D3[807575].Population - Spots 488[1].txt	347280
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.D3[807575].Population - Spots 561[2].txt	337064
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.D4[807578].Population - Nuclei Final[0].txt	128502
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.D4[807578].Population - Spots 488[1].txt	404433
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.D4[807578].Population - Spots 561[2].txt	401015
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.D5[807581].Population - Nuclei Final[0].txt	123275
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.D5[807581].Population - Spots 488[1].txt	386581
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.D5[807581].Population - Spots 561[2].txt	376275
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.D6[807584].Population - Nuclei Final[0].txt	84247
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.D6[807584].Population - Spots 488[1].txt	263982
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.D6[807584].Population - Spots 561[2].txt	261304
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.E3[807587].Population - Nuclei Final[0].txt	111898
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.E3[807587].Population - Spots 488[1].txt	360324
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.E3[807587].Population - Spots 561[2].txt	355308
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.E4[807590].Population - Nuclei Final[0].txt	136003
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.E4[807590].Population - Spots 488[1].txt	423802
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.E4[807590].Population - Spots 561[2].txt	413602
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.E5[807593].Population - Nuclei Final[0].txt	113968
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.E5[807593].Population - Spots 488[1].txt	334562
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.E5[807593].Population - Spots 561[2].txt	334171
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.E6[807596].Population - Nuclei Final[0].txt	37940
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.E6[807596].Population - Spots 488[1].txt	108597
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.E6[807596].Population - Spots 561[2].txt	107493
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.F3[807599].Population - Nuclei Final[0].txt	127516
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.F3[807599].Population - Spots 488[1].txt	393957
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.F3[807599].Population - Spots 561[2].txt	389168
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.F4[807602].Population - Nuclei Final[0].txt	101611
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.F4[807602].Population - Spots 488[1].txt	321797
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.F4[807602].Population - Spots 561[2].txt	313399
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.F5[807605].Population - Nuclei Final[0].txt	112722
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.F5[807605].Population - Spots 488[1].txt	365834
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.F5[807605].Population - Spots 561[2].txt	359358
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.F6[807608].Population - Nuclei Final[0].txt	45370
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.F6[807608].Population - Spots 488[1].txt	137956
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.F6[807608].Population - Spots 561[2].txt	136339
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.G3[807611].Population - Nuclei Final[0].txt	128352
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.G3[807611].Population - Spots 488[1].txt	379759
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.G3[807611].Population - Spots 561[2].txt	379311
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.G4[807614].Population - Nuclei Final[0].txt	102914
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.G4[807614].Population - Spots 488[1].txt	326179
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.G4[807614].Population - Spots 561[2].txt	326350
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.G5[807617].Population - Nuclei Final[0].txt	105526
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.G5[807617].Population - Spots 488[1].txt	333107
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.G5[807617].Population - Spots 561[2].txt	330006
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.G6[807620].Population - Nuclei Final[0].txt	32068
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.G6[807620].Population - Spots 488[1].txt	97504
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.G6[807620].Population - Spots 561[2].txt	97307
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.H3[807623].Population - Nuclei Final[0].txt	148240
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.H3[807623].Population - Spots 488[1].txt	450685
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.H3[807623].Population - Spots 561[2].txt	449851
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.H4[807626].Population - Nuclei Final[0].txt	85796
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.H4[807626].Population - Spots 488[1].txt	265192
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.H4[807626].Population - Spots 561[2].txt	281689
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.H5[807629].Population - Nuclei Final[0].txt	87419
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.H5[807629].Population - Spots 488[1].txt	264113
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.H5[807629].Population - Spots 561[2].txt	285241
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.H6[807632].Population - Nuclei Final[0].txt	71533
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.H6[807632].Population - Spots 488[1].txt	230195
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.H6[807632].Population - Spots 561[2].txt	238165
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.I3[807638].Population - Nuclei Final[0].txt	180566
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.I3[807638].Population - Spots 488[1].txt	564204
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.I3[807638].Population - Spots 561[2].txt	559361
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.I4[807641].Population - Nuclei Final[0].txt	137581
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.I4[807641].Population - Spots 488[1].txt	411461
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.I4[807641].Population - Spots 561[2].txt	408119
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.I5[807635].Population - Nuclei Final[0].txt	70966
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.I5[807635].Population - Spots 488[1].txt	224974
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.I5[807635].Population - Spots 561[2].txt	225252
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.I6[807644].Population - Nuclei Final[0].txt	85651
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.I6[807644].Population - Spots 488[1].txt	268421
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.I6[807644].Population - Spots 561[2].txt	263634
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.J3[807647].Population - Nuclei Final[0].txt	106495
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.J3[807647].Population - Spots 488[1].txt	334436
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.J3[807647].Population - Spots 561[2].txt	338019
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.J4[807650].Population - Nuclei Final[0].txt	57065
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.J4[807650].Population - Spots 488[1].txt	178313
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.J4[807650].Population - Spots 561[2].txt	176919
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.J5[807653].Population - Nuclei Final[0].txt	98419
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.J5[807653].Population - Spots 488[1].txt	306640
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.J5[807653].Population - Spots 561[2].txt	305491
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.J6[807656].Population - Nuclei Final[0].txt	65323
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.J6[807656].Population - Spots 488[1].txt	218350
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.J6[807656].Population - Spots 561[2].txt	215128
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.K3[807659].Population - Nuclei Final[0].txt	113738
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.K3[807659].Population - Spots 488[1].txt	339991
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.K3[807659].Population - Spots 561[2].txt	337048
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.K4[807665].Population - Nuclei Final[0].txt	93162
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.K4[807665].Population - Spots 488[1].txt	273570
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.K4[807665].Population - Spots 561[2].txt	276124
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.K5[807668].Population - Nuclei Final[0].txt	119569
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.K5[807668].Population - Spots 488[1].txt	363185
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.K5[807668].Population - Spots 561[2].txt	356152
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.K6[807662].Population - Nuclei Final[0].txt	43947
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.K6[807662].Population - Spots 488[1].txt	146515
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.K6[807662].Population - Spots 561[2].txt	143780
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.L3[807671].Population - Nuclei Final[0].txt	111622
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.L3[807671].Population - Spots 488[1].txt	348548
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.L3[807671].Population - Spots 561[2].txt	344597
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.L4[807677].Population - Nuclei Final[0].txt	91923
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.L4[807677].Population - Spots 488[1].txt	294141
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.L4[807677].Population - Spots 561[2].txt	284484
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.L5[807674].Population - Nuclei Final[0].txt	92675
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.L5[807674].Population - Spots 488[1].txt	306156
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.L5[807674].Population - Spots 561[2].txt	297861
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.L6[807680].Population - Nuclei Final[0].txt	87795
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.L6[807680].Population - Spots 488[1].txt	280967
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.L6[807680].Population - Spots 561[2].txt	277808
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.M3[807683].Population - Nuclei Final[0].txt	104670
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.M3[807683].Population - Spots 488[1].txt	312906
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.M3[807683].Population - Spots 561[2].txt	307441
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.M4[807686].Population - Nuclei Final[0].txt	135262
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.M4[807686].Population - Spots 488[1].txt	407280
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.M4[807686].Population - Spots 561[2].txt	401875
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.M5[807689].Population - Nuclei Final[0].txt	99717
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.M5[807689].Population - Spots 488[1].txt	301037
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.M5[807689].Population - Spots 561[2].txt	299992
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.M6[807692].Population - Nuclei Final[0].txt	88261
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.M6[807692].Population - Spots 488[1].txt	275606
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.M6[807692].Population - Spots 561[2].txt	265855
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.N3[807695].Population - Nuclei Final[0].txt	37532
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.N3[807695].Population - Spots 488[1].txt	121342
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.N3[807695].Population - Spots 561[2].txt	119003
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.N4[807698].Population - Nuclei Final[0].txt	14928
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.N4[807698].Population - Spots 488[1].txt	41393
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.N4[807698].Population - Spots 561[2].txt	42664
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.N5[807701].Population - Nuclei Final[0].txt	18187
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.N5[807701].Population - Spots 488[1].txt	46322
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.N5[807701].Population - Spots 561[2].txt	45170
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.N6[807704].Population - Nuclei Final[0].txt	15048
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.N6[807704].Population - Spots 488[1].txt	49713
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.N6[807704].Population - Spots 561[2].txt	48902
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.O3[807710].Population - Nuclei Final[0].txt	118697
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.O3[807710].Population - Spots 488[1].txt	360233
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.O3[807710].Population - Spots 561[2].txt	355978
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.O4[807716].Population - Nuclei Final[0].txt	180088
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.O4[807716].Population - Spots 488[1].txt	539666
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.O4[807716].Population - Spots 561[2].txt	539368
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.O5[807707].Population - Nuclei Final[0].txt	127470
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.O5[807707].Population - Spots 488[1].txt	372745
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.O5[807707].Population - Spots 561[2].txt	366007
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.O6[807713].Population - Nuclei Final[0].txt	105172
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.O6[807713].Population - Spots 488[1].txt	322073
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.O6[807713].Population - Spots 561[2].txt	315466
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.P3[807719].Population - Nuclei Final[0].txt	19730
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.P3[807719].Population - Spots 488[1].txt	59937
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.P3[807719].Population - Spots 561[2].txt	58553
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.P4[807722].Population - Nuclei Final[0].txt	24463
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.P4[807722].Population - Spots 488[1].txt	85005
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.P4[807722].Population - Spots 561[2].txt	82903
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.P5[807725].Population - Nuclei Final[0].txt	4811
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.P5[807725].Population - Spots 488[1].txt	13353
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.P5[807725].Population - Spots 561[2].txt	13663
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.P6[807728].Population - Nuclei Final[0].txt	8031
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.P6[807728].Population - Spots 488[1].txt	26722
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/210617 Spots 488 561 3D Analysis[807731].result.P6[807728].Population - Spots 561[2].txt	28331
+analyses/miniscreen_pilot/data/210521-MiniScreen_20210521_165842[7101]/AUTO0198[7251]/2021-05-21T165926-0400[7301]/MeasurementIndex.ColumbusIDX.xml	81423
+analyses/miniscreen_pilot/data/README.md	533
+analyses/miniscreen_pilot/metadata/Mini Screen Plate layout.xlsx	17326
+analyses/miniscreen_pilot/output/cell-count-1.png	142884
+analyses/miniscreen_pilot/output/n-green-spots-1.png	183287
+analyses/miniscreen_pilot/output/n-red-spots-1.png	188061
+analyses/miniscreen_pilot/output/sgrna-gr-2D-density-1.png	386002
+analyses/miniscreen_pilot/output/sgrna-gr-3D-density-1.png	408772
+analyses/miniscreen_pilot/output/sgrna-gr-3D-histogram-1.png	207252
+analyses/miniscreen_pilot/output/single-well-fr-density-1.png	386002
+analyses/miniscreen_pilot/output/z-histogram-1.png	98326
+analyses/miniscreen_pilot/renv/activate.R	17958
+analyses/miniscreen_pilot/renv.lock	20041
+data/README.md	994
+data/extended_tables/Extended Data Table 1.xlsx	43764
+data/extended_tables/Extended Data Table 2 siRNA Library Validation v2.xlsx	13158
+data/extended_tables/Extended Data Table 3 BAC Probes.xlsx	9687
+data/extended_tables/Extended Data Table 4 Sequencing tracks.xlsx	11985
+data/extended_tables/README.md	621
+docs/analysis_workflow.md	2774
+docs/code_review_notes.md	2063
+docs/data_requirements.md	3470
+docs/extended_tables_summary.md	1215
+docs/figure_code_map.md	5544
+docs/file_inventory.tsv	44064
+docs/notebook_index.md	6211
+docs/repository_inventory.md	590
+docs/software_environment.md	1562
+docs/source_archive_cleanup.md	1466
+scripts/README.md	311
+scripts/check_inputs.R	2130
+scripts/render_all.R	1830
