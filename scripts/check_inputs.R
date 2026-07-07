@@ -15,7 +15,7 @@ check_file <- function(path) {
 }
 
 check_pattern <- function(root, pattern) {
-  hits <- list.files(root, pattern = pattern, recursive = TRUE, full.names = TRUE)
+  hits <- if (dir.exists(root)) list.files(root, pattern = pattern, recursive = TRUE, full.names = TRUE) else character()
   cat(if (length(hits) > 0) "[OK]   " else "[MISS] ", root, " pattern /", pattern, "/ : ", length(hits), " file(s)\n", sep = "")
   invisible(hits)
 }
@@ -34,6 +34,7 @@ mini <- file.path("analyses", "miniscreen_pilot")
 check_file(file.path(mini, "210521-MiniScreen.Rmd"))
 check_file(file.path(mini, "Columbus_3D.Rmd"))
 check_file(file.path(mini, "renv.lock"))
+check_file(file.path(mini, "data_raw", "miniscreen_columbus_exports.zip"))
 check_pattern(file.path(mini, "data"), "Nuclei Final\\[0\\].*\\.txt$")
 check_pattern(file.path(mini, "data"), "Spots 488\\[1\\].*\\.txt$")
 check_pattern(file.path(mini, "data"), "Spots 561\\[2\\].*\\.txt$")
@@ -44,4 +45,6 @@ check_file(file.path("data", "extended_tables", "Extended Data Table 2 siRNA Lib
 check_file(file.path("data", "extended_tables", "Extended Data Table 3 BAC Probes.xlsx"))
 check_file(file.path("data", "extended_tables", "Extended Data Table 4 Sequencing tracks.xlsx"))
 
-cat("\nDone. Missing Figure 3 raw data are expected unless the HiTIPS exports have been restored.\n")
+cat("\nNotes:\n")
+cat("- Missing Figure 3 HiTIPS CSV exports are expected unless they have been restored to analyses/figure3_cell_cycle_boundary_distance/data/.\n")
+cat("- Mini-screen raw exports are tracked as a zip archive. Run: Rscript scripts/unpack_packaged_data.R miniscreen\n")

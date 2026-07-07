@@ -1,6 +1,6 @@
 # Extended Data Tables
 
-These files were extracted from the uploaded manuscript package and copied here as small tabular reference data.
+This folder contains small tabular reference files associated with the manuscript.
 
 - `Extended Data Table 1.xlsx` - CRISPR screen TAD boundary distance table with gene symbol, z-score, and boundary distance.
 - `Extended Data Table 2 siRNA Library Validation v2.xlsx` - siRNA validation library table.

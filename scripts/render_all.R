@@ -17,7 +17,7 @@ run <- function(cmd, args, workdir) {
 }
 
 has_pattern <- function(root, pattern) {
-  length(list.files(root, pattern = pattern, recursive = TRUE, full.names = TRUE)) > 0
+  dir.exists(root) && length(list.files(root, pattern = pattern, recursive = TRUE, full.names = TRUE)) > 0
 }
 
 repo <- normalizePath(getwd(), winslash = "/", mustWork = TRUE)
@@ -36,6 +36,12 @@ if (!fig3_has_data) {
   cat("\nSkipping Figure 3 notebook: quarto command not found.\n")
 } else {
   run("quarto", c("render", "230918-ETB078-FISH-EdU-Opt3.qmd"), fig3)
+}
+
+# Unpack packaged mini-screen data if needed.
+unpack_script <- file.path(repo, "scripts", "unpack_packaged_data.R")
+if (file.exists(unpack_script)) {
+  run(R.home("bin/Rscript"), c(unpack_script, "miniscreen"), repo)
 }
 
 # Render mini-screen notebook if rmarkdown is available.

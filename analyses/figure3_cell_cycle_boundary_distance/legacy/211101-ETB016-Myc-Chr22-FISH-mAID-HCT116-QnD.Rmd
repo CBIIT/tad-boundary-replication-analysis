@@ -1,0 +1,282 @@
+---
+title: "TADs Relaxation upon induced RAD21 Degradation in HCT116 Cells "
+author: "Theodore Busby/Gianluca Pegoraro"
+date: "January, 21st 2022"
+output: html_document
+---
+
+```{r load-libraries}
+library(tidyverse)
+library(SpatialTools)
+library(fs)
+library(reshape2)
+library(data.table)
+library(ggthemes)
+library(ggpointdensity)
+source("R/Plotters.R")
+```
+
+### Image acquisition and analysis conditions
+
+-   Microscope: CV7000
+-   Objective: 60X water
+-   Binning: 1X1
+-   Image Analysis Software: HiTIPS v?
+
+```{r set-options, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(
+  fig.path = "output/",
+  cache = FALSE,
+  cache.path = "cache/",
+  dev = c("png"),
+  fig.width = 15,
+  fig.height = 7,
+  message = FALSE,
+  warning = FALSE
+)
+
+theme_set(theme_bw())
+theme_update(
+  axis.text.x = element_text(
+    angle = -45,
+    hjust = 0,
+    vjust = 0.5
+  ),
+  axis.text.y = element_text(hjust = 0)
+)
+```
+
+Specify x,y pixel size (microns) and z-step (microns).
+
+```{r set-resolution}
+xy_res <- 0.108
+z_step <- 0.5
+```
+
+### Set Experimental Treatments metadata
+
+Read and process the experimental metadata layout file
+
+```{r plate-layout}
+treat_levs <- c("None", "Vehicle", "Auxin_30",
+                "Auxin_60", "Auxin_180", "Auxin_360")
+
+plate_layout <- read_tsv("metadata/plate_layout.txt") %>%
+  filter(!is.na(treat)) %>%
+  mutate(treat = factor(treat, levels = treat_levs))
+
+glimpse(plate_layout)
+```
+
+```{r treatment-layout, echo=FALSE}
+plot_plate(table = plate_layout,
+           property = treat,
+           discrete_property = T,
+           legend = "Experimental\nTreatment",
+           title = "Experimental Layout")
+```
+
+```{r probeset-layout, echo=FALSE}
+plot_plate(table = plate_layout,
+           property = probe,
+           discrete_property = T,
+           legend = "Probe Set",
+           title = "FISH Probe Set Layout")
+```
+
+### Read Object Level Data
+
+Set `glob` patterns for directory searches for cell level data and spot data,resepectively. The spot level data is stored in a single .csv file per well where all the spots in all the channels are stored. The `channel` variable value indicates the channel in which the spot was detected according to this mapping:
+
+-   3: Red (561)
+-   4: Far Red (640)
+
+```{r set-glob}
+glob_c <- "data*/well_nuclei_results/*.csv" # Pattern for Single Cell data files
+glob_s <- "data*/well_spots_locations/*.csv" # Pattern for Spot level data files
+```
+
+Read and process the cell-level data. Filter nuclei that are irregularly shaped (`solidity`) and that are too small (`area`).
+
+```{r read-cells}
+cell_tbl <- dir_info("data", 
+       recurse = T, 
+       glob = glob_c) %>%
+  filter(size > "1K") %>%
+  rowwise() %>%
+  summarise(fread(path)) %>%
+  rename(cell_index = label,
+         x = `centroid-0`,
+         y = `centroid-1`) %>%
+  select(Experiment, column, row, field_index,
+         time_point, cell_index, x:solidity) %>%
+  arrange(Experiment, column, row, field_index,
+          time_point, cell_index) %>%
+  filter(area >= 30) 
+  
+glimpse(cell_tbl)
+```
+
+Read and process the spot level data. Convert the x, y and z coordinates to microns (They were originally calculated in pixels) and filter spots that do not belong to any nucleus. These have a `cell_index` value of `0`.
+
+```{r read-spots}
+spot_tbl <- dir_info("data", 
+       recurse = T, 
+       glob = glob_s) %>%
+  filter(size > "1K") %>%
+  rowwise() %>%
+  summarise(fread(path)) %>%
+  rename(spot_index = V1,
+         x = x_location,
+         y = y_location,
+         z = z_location) %>%
+  #conversion from pixels to microns
+  mutate(across(x:y, list(mic = ~ .x * xy_res)),
+         z_mic = z * z_step) %>%
+  select(column, row, field_index,
+         time_point, cell_index, spot_index, 
+         channel, x:z_mic) %>%
+  #filter spots not in the nucleus
+  filter(cell_index != 0) %>%
+  arrange(column, row, field_index,
+          time_point, cell_index, channel)
+
+glimpse(spot_tbl)
+```
+
+Use the `spot_tbl` to calculate the number of spots per cell in each color.
+
+```{r calc-n-spots}
+cell_n_spots_tbl <- spot_tbl %>%
+  group_by(column, row, field_index,
+           time_point, cell_index, channel) %>%
+  count() %>%
+  pivot_wider(names_from = channel,
+              names_prefix = "n_spots_channel_",
+              values_from = n,
+              values_fill = 0)
+
+glimpse(cell_n_spots_tbl)
+```
+
+```{r n-red-spots, echo=F}
+cell_n_spots_tbl %>%
+  ggplot(aes(x = n_spots_channel_3,
+             y = ..density..)) +
+  geom_histogram(binwidth = 1) +
+  scale_x_continuous(breaks = 0:5) +
+  coord_cartesian(xlim = c(-1, 5)) +
+  facet_grid(vars(row), vars(column)) +
+  xlab("Number of Red Spots per Cell") +
+  ggtitle("Red Spots") 
+```
+
+```{r n-farred-spots, echo=F}
+cell_n_spots_tbl %>%
+  ggplot(aes(x = n_spots_channel_4,
+             y = ..density..)) +
+  geom_histogram(binwidth = 1) +
+  scale_x_continuous(breaks = 0:5) +
+  coord_cartesian(xlim = c(-1, 5)) +
+  facet_grid(vars(row), vars(column)) +
+  xlab("Number of Far Red Spots per Cell") +
+  ggtitle("Far Red Spots") 
+```
+
+### Spot Filtering
+
+Filter cells that have 2 spots or more in both the 561 and 640 channels.
+
+```{r}
+cell_n_spots_filt_tbl <- cell_n_spots_tbl %>%
+  semi_join(cell_tbl, by = c("row", "column", "field_index",
+                             "time_point", "cell_index")) %>%
+          filter(n_spots_channel_3 > 1 & n_spots_channel_3 == n_spots_channel_3)
+
+glimpse(cell_n_spots_filt_tbl)
+```
+
+Filter out spots that do not belong to the correct population of cells obtained in the previous chunk.
+
+```{r}
+spot_filt_tbl <- spot_tbl %>% 
+  semi_join(cell_n_spots_filt_tbl, 
+            on = c("column", "row", "field_index",
+                   "time_point", "cell_index")) %>%
+  left_join(plate_layout, by = c("row", "column")) %>%
+  data.table()
+  
+glimpse(spot_filt_tbl)
+```
+
+### Red/FarRed Spot Distances Calculations
+
+Calculate 2D spot distances.
+
+```{r calc-spot-dist, results="hide"}
+#Green-Red
+fr_dist_2D <- spot_filt_tbl[channel %in% 3:4, # Only  Red and FarRed spots
+                              reshape2::melt(dist2(as.matrix(.SD[channel == 3,
+                                                       list(x_mic,y_mic)]),
+                                         as.matrix(.SD[channel == 4,
+                                                       list(x_mic,y_mic)])),
+                                   value.name = "fr_dist"),
+                          by = list(row, 
+                                    column,
+                                    treat,
+                                    probe,
+                                    field_index, 
+                                    time_point, 
+                                    cell_index)]
+
+setnames(fr_dist_2D, c("Var1","Var2"), c("r_index","f_index"))
+
+
+glimpse(fr_dist_2D)
+```
+
+Red-FarRed proximity calculations. **Important: this calculations find the closest Red/FarRed pairs (by calculating the the minimum distance) on a per Red Spot basis**.
+
+```{r proximityR-G, warning=F}
+setkey(fr_dist_2D, row, column, treat, probe,
+       field_index, time_point, cell_index, r_index)
+
+fr_dist_min_2D <- fr_dist_2D[, .SD[which.min(fr_dist),], 
+                        by = key(fr_dist_2D)]
+```
+
+### Single Allele Distances Distributions
+
+Generate density plots on per Treatment and Probe basis (Pooled wells).
+
+```{r pooled-sgRNA-gr-density, echo=F}
+fr_dist_min_2D %>%
+  ggplot(aes(x = fr_dist,
+             color = treat)) +
+  geom_density() +
+  scale_color_viridis_d(name = "Treatment") +
+  coord_cartesian(xlim = c(0, 4)) +
+  facet_wrap(vars(probe)) +
+  xlab("2D Red/Green Distance (microns)") +
+  ylab("Density")
+``` 
+
+Generate density plots on per Treatment and Probe basis (Independent wells).
+
+```{r single-sgRNA-fr-density, echo=F}
+fr_dist_min_2D %>%
+  ggplot(aes(x = fr_dist,
+             color = treat,
+             group = interaction(row, column))) +
+  geom_density() +
+  scale_color_viridis_d(name = "Treatment") +
+  facet_wrap(vars(probe)) +
+  coord_cartesian(xlim = c(0, 4)) +
+  xlab("2D Red/FarRed Distance (microns)")
+```
+
+Document the information about the analysis session
+
+```{r sessionInfo, include=TRUE, echo=TRUE, results="markup"}
+sessionInfo()
+```

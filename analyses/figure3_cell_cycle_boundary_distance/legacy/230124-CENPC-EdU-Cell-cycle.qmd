@@ -1,0 +1,489 @@
+---
+title: "Cell Cycle Analysis validation with Aphidicolin and RO-3306"
+author: "Krishnendu Guin/Adib Keikhosravi/Gianluca Pegoraro"
+date: today
+date-format: long
+format: 
+  html:
+      self-contained: true
+      code-fold: true
+      code-tools: true
+      code-link: true
+editor: visual
+---
+
+```{r}
+#| label: load-packages
+#| include: false
+#| warning: false
+
+library(tidyverse)
+library(fs)
+library(data.table)
+library(ggthemes)
+library(mclust)
+source("funcs/plotting.R")
+```
+
+```{r}
+#| label: set-theme
+#| include: false
+
+theme_set(theme_bw())
+theme_update(axis.text.x = element_text(
+angle = -45,
+hjust = 0,
+vjust = 0.5
+),
+  axis.text.y = element_text(hjust = 0)
+)
+```
+
+### Image acquisition and analysis conditions
+
+-   Microscope: CV8000
+-   Objective: 60X water
+-   Binning: 1X1
+-   Image Analysis Software: HiTIPS v?
+
+### Read Experimental Metadata
+
+Read plate layout for siRNA treatments and RNAiMax conc.
+
+```{r}
+#| label: read-metadata
+
+treat_levs <- c("Aphid.", "RO-3306") 
+
+plate_layout <- read_tsv("metadata/plate_layout.txt") %>%
+  filter(!is.na(treat)) %>%
+  mutate(sirna = factor(treat, levels = treat_levs))
+
+glimpse(plate_layout)
+```
+
+```{r}
+#| label: cell-line-layout
+
+plot_plate(
+  table = plate_layout,
+  property = cell_line,
+  discrete_property = T,
+  legend = "Cell line",
+  title = "Cell Type"
+)
+```
+
+```{r}
+#| label: compound-layout
+
+plot_plate(
+  table = plate_layout,
+  property = treat,
+  discrete_property = T,
+  legend = "Treatment",
+  title = "Cell Cycle Inhibitors"
+)
+```
+
+```{r}
+#| label: compound-conc-layout
+
+plot_plate(
+  table = plate_layout,
+  property = treat_um,
+  discrete_property = F,
+  legend = "Conc. (uM)",
+  title = "Cell Cycle Inhibitor Conc."
+)
+```
+
+### Read single cell data
+
+Read the single cell data from HiTIPS and rename some variables. Also, log2 transform the DAPI Int. Sum and EdU Int. Sum values. This shrink the dispersion of the 2N and 4N peaks for DAPI. Similarly, the log transform and helps separating EdU- from EdU+ nuclei. Finally, filter out cells that are too irregularly shaped or that are too small.
+
+```{r}
+cell_tbl <- dir_info("data", 
+                     recurse = T, 
+                     glob = "*.csv") %>%
+  filter(size > "1K") %>%
+  rowwise() %>%
+  summarise(fread(path)) %>%
+  select(file_name = Experiment,
+         column, row, 
+         field = field_index, 
+         time_point, cell_index,
+         area, solidity,
+         k_clustering = clustering_percentage_r_correction,
+         radial_dist = mean_radial_distance,
+         spots_number,
+         dapi_int_sum = DAPI_sum_intensity,
+         dapi_int_mean = DAPI_mean_intensity,
+         edu_int_sum = EdU_sum_intensity,
+         edu_int_mean = EdU_mean_intensity) %>%
+  mutate(well = paste0(LETTERS[row], column),
+         dapi_int_sum_log2 = log2(dapi_int_sum+1),
+         edu_int_sum_log2 = log2(edu_int_sum+1)) %>%
+  left_join(plate_layout, by = c("row", "column")) %>%
+  select(file_name:row, well,
+         cell_line, treat, treat_um,
+         field:dapi_int_sum, 
+         dapi_int_sum_log2, 
+         dapi_int_mean,
+         edu_int_sum,
+         edu_int_sum_log2,
+         edu_int_mean) %>%
+  arrange(file_name, column, row, field,
+          time_point, cell_index) %>%
+  filter(area >= 30,
+         solidity > 0.875) 
+  
+glimpse(cell_tbl)
+```
+
+Calculate per well means for all the measured variables.
+
+```{r}
+well_tbl <- cell_tbl %>%
+  group_by(file_name, row, column, well, cell_line, treat, treat_um) %>%
+  summarise(n_nuclei = n(),
+            across(area: edu_int_mean, 
+                   mean))
+glimpse(well_tbl)
+```
+
+### Heatmaps
+
+Check the cell number.
+
+```{r}
+#| label: nucleus_n_heatmap
+
+plot_plate(
+  table = well_tbl,
+  property = n_nuclei,
+  discrete_property = F,
+  legend = "Number of Nuclei\nper Well",
+  title = "Cell Number"
+)
+```
+
+Check the nucleus area.
+
+```{r}
+#| label: area_heatmap
+
+plot_plate(
+  table = well_tbl,
+  property = area,
+  discrete_property = F,
+  legend = "Nucleus Area\nMean per Well",
+  title = "Nucleus Area"
+)
+```
+
+```{r}
+#| label: dapi_int_sum_heatmap
+
+plot_plate(
+  table = well_tbl,
+  property = dapi_int_sum,
+  discrete_property = F,
+  legend = "DAPI Int. Sum\nMean per Well",
+  title = "Integrated DAPI Intensity"
+)
+```
+
+```{r}
+#| label: edu_int_mean_heatmap
+
+plot_plate(
+  table = well_tbl,
+  property = edu_int_mean,
+  discrete_property = F,
+  legend = "EdU Int. Mean\nMean per Well",
+  title = "Mean EdU Intensity"
+)
+```
+
+### DAPI Histograms
+
+```{r}
+#| label: cc-RPE1
+
+cell_tbl %>%
+  filter(cell_line == "RPE1") %>%
+  plot_histogram(property = dapi_int_sum_log2,
+                 property_legend = "Log2(Dapi Int. Sum)", 
+                 bin_width = 0.1, 
+                 limits = c(23, 27),
+                 title = "DAPI Histograms RPE1 Cells")
+```
+
+```{r}
+#| label: cc-RPE1-controls
+
+cell_tbl %>%
+  filter(cell_line == "RPE1" & treat_um == 0) %>%
+  plot_histogram(property = dapi_int_sum_log2,
+                 property_legend = "Log2(Dapi Int. Sum)", 
+                 bin_width = 0.1, 
+                 limits = c(23, 27),
+                 title = "DAPI Histograms RPE1 Cells")
+```
+
+```{r}
+#| label: cc-HCT116
+
+cell_tbl %>%
+  filter(cell_line == "HCT116") %>%
+  plot_histogram(property = dapi_int_sum_log2,
+                 property_legend = "Log2(Dapi Int. Sum)", 
+                 bin_width = 0.1, 
+                 limits = c(23, 27),
+                 title = "DAPI Histograms HCT116 Cells")
+```
+
+```{r}
+#| label: cc-HCT116-controls
+
+cell_tbl %>%
+  filter(cell_line == "HCT116" & treat_um == 0) %>%
+  plot_histogram(property = dapi_int_sum_log2,
+                 property_legend = "Log2(Dapi Int. Sum)", 
+                 bin_width = 0.1, 
+                 limits = c(23, 27),
+                 title = "DAPI Histograms HCT116 Cells")
+```
+
+```{r}
+#| label: cenpc-n-RPE1
+
+cell_tbl %>%
+  filter(cell_line == "RPE1") %>%
+  plot_histogram(property = spots_number,
+                 property_legend = "Number of CENPC Spots per Cell", 
+                 bin_width = 5, 
+                 limits = c(0, 100),
+                 title = "CENPC spots Histograms RPE1 Cells")
+```
+
+```{r}
+#| label: cenpc-n-HCT116
+
+cell_tbl %>%
+  filter(cell_line == "HCT116") %>%
+  plot_histogram(property = spots_number,
+                 property_legend = "Number of CENPC Spots per Cell", 
+                 bin_width = 5, 
+                 limits = c(0, 150),
+                 title = "CENPC spots Histograms HCT116 Cells")
+```
+
+```{r}
+#| label: k-clust-RPE1
+
+cell_tbl %>%
+  filter(cell_line == "RPE1") %>%
+  plot_histogram(property = k_clustering,
+                 property_legend = "% of K-function above Random", 
+                 bin_width = 5, 
+                 limits = c(0, 100),
+                 title = "CENPC Spots Clustering RPE1")
+```
+
+```{r}
+#| label: k-clust-HCT116
+
+cell_tbl %>%
+  filter(cell_line == "HCT116") %>%
+  plot_histogram(property = k_clustering,
+                 property_legend = "% of K-function above Random", 
+                 bin_width = 5, 
+                 limits = c(0, 100),
+                 title = "CENPC Spots Clustering HCT116")
+```
+
+### DAPI Cell Cycle Normalization
+
+It is pretty normal that the position of the G1 peak on the x-axis is translated well to well. The overall shape of the histogram does not change. Past experiments showed that there is not much
+
+Write a function to fit two distributions to the `2N` and `4N` peaks to find their position (i.e. the mean of the distribution) in a vector of DAPI Int. Sum values. Always return minimum value of 2-component GMM fit (just in case the means aren't sorted).
+
+```{r}
+G1_peakfinder_Mclust <- function(x, nComponents = 2) {
+  mixi <- Mclust(x, G = nComponents)
+  min(mixi$parameters$mean)
+}
+```
+
+Apply the function to each of the well cells to find the G1 peak in each of them. Then set the G1 (2N) peak to 1 and normalize all the other log2(DAPI Int. Sum) values accordingly. Since, these is a log2 scale a difference of 1 corresponds to a 2-fold difference on a linear scale. For this reason, the G2 (4N) peak should fall around 2. however, previous work from the lab (Zane et al., Mol. Cell. Biol., 2018) showed that the position of the G2 peak calculated this way is slightly lower, \~ 1.8 - 1.9.
+
+```{r}
+selected_wells_tbl <- cell_tbl %>%
+  filter(cell_line == "RPE1" & dplyr::between(dapi_int_sum_log2 , 24, 27)) %>%
+  group_by(file_name, row, column, well) %>% 
+  mutate(g1_peak = G1_peakfinder_Mclust(dapi_int_sum_log2),
+         dapi_int_sum_log2_norm := dapi_int_sum_log2 - g1_peak + 1)
+        
+glimpse(selected_wells_tbl)
+```
+
+```{r}
+#| label: sel-wells-cc-norm
+
+selected_wells_tbl %>%
+  plot_histogram(property = dapi_int_sum_log2_norm,
+                 property_legend = "Log2(Dapi Int. Sum) Norm.", 
+                 bin_width = 0.1, 
+                 limits = c(-0.25, 3.75),
+                 title = "Selected Wells Cell Cycle Normalized")
+```
+
+Now all the wells show the histogram on the normalized scale. This helps with setting thresholds to calculate the different cell cycle phases:
+
+-   Below 0.5: Sub G1
+
+-   Between 0.5 and 1.25: G1
+
+-   Between 1.25 and 1.75: S
+
+-   Between 1.75 and 2.25: G2/M
+
+-   Above 2.25: \> 4N
+
+```{r}
+cc_phases <- c("SubG1", "G1", "S", "G2_M", ">4N")
+
+selected_wells_tbl <- selected_wells_tbl %>%
+  mutate(cc_phase = cut(
+    dapi_int_sum_log2_norm,
+    breaks = c(
+      min(dapi_int_sum_log2_norm),
+      0.5,
+      1.25,
+      1.75,
+      2.25,
+      max(dapi_int_sum_log2_norm)
+    ),
+    labels = cc_phases
+  ))
+
+glimpse(selected_wells_tbl)
+```
+
+Plot a stacked bar plot to indicate the fraction of cells in each cell cycle phase calculated only taking into account the DAPI Int. Sum measurement.
+
+```{r}
+selected_wells_tbl %>%
+  ggplot(aes(x = well,
+             fill = cc_phase)) +
+  geom_bar(position = "fill") +
+  scale_fill_tableau(name = "Cell Cycle\nPhase") +
+  labs(x = "Well", 
+       y = "Fraction",
+       title = "Cell Cycle DAPI Only")
+```
+
+```{r}
+selected_wells_tbl %>%
+  ggplot(aes(x = factor(treat_um),
+             fill = cc_phase)) +
+  geom_bar(position = "fill") +
+  scale_fill_tableau(name = "Cell Cycle\nPhase") +
+  facet_wrap(vars(treat), scales = "free_x") +
+  labs(x = "Treatment Conc. (uM)", 
+       y = "Fraction",
+       title = "Cell Cycle DAPI Only")
+```
+
+### DAPI and EdU Cell Cycle Normalization
+
+Plot the Dapi Int. Sum vs. the EdU Int. Sum.
+
+```{r}
+selected_wells_tbl %>%
+  filter(treat_um == 0) %>%
+  ggplot(aes(x = dapi_int_sum_log2_norm,
+         y = edu_int_sum_log2)) +
+  geom_point(shape = 21,
+             size = 0.5) +
+  coord_cartesian(xlim = c(0, 3)) +
+  facet_wrap(vars(well)) +
+  labs(x = "Log2(Dapi Int. Sum) Norm.",
+       y = "Log2(EdU Int. Sum)")
+```
+
+As expected, there is a population cells between Log2(Dapi Int. Sum) Norm. values of 1 and 2 that is strongly positive for the EdU staining. These are likely S phase cells. Based on this observation, assign cell cycle phases taking into account both Log2(Dapi Int. Sum) Norm. and Log2(Edu Int. Sum) values:
+
+-   DAPI below 0.5: Sub G1
+
+-   DAPI between 0.5 and 1.5 AND EdU less than 22: G1
+
+-   DAPI between 0.5 and 2.25 AND EdU more than 22: S
+
+-   DAPI between 1.5 and 2.25 AND EdU less than 22: G2/M
+
+-   DAPI above 2.25: \> 4N
+
+```{r}
+selected_wells_tbl <- selected_wells_tbl %>%
+  mutate(cc_edu_phase = factor(case_when(
+    dapi_int_sum_log2_norm <= 0.5 ~ "SubG1",
+    dapi_int_sum_log2_norm <= 1.5 & edu_int_sum_log2 <= 22 ~ "G1",
+    dapi_int_sum_log2_norm <= 2.25 & edu_int_sum_log2 > 22 ~ "S",
+    dapi_int_sum_log2_norm <= 2.25 & edu_int_sum_log2 <= 22 ~ "G2_M",
+    TRUE ~ ">4N"
+  ),
+  levels = cc_phases))
+
+glimpse(selected_wells_tbl)
+```
+
+Plot again DAPI vs. EdU for each cell, but this time also color dots based on the assigned cell cycle phase according to this new criterion.
+
+```{r}
+selected_wells_tbl %>%
+  ggplot(aes(x = dapi_int_sum_log2_norm,
+             y = edu_int_sum_log2,
+             color = cc_edu_phase)) +
+  geom_point(shape = 21,
+             size = 0.5) +
+  coord_cartesian(xlim = c(0, 3)) +
+  scale_color_tableau(name = "Cell Cycle\nPhase") +
+  facet_wrap(vars(well)) +
+  labs(x = "Log2(Dapi Int. Sum) Norm.",
+       y = "Log2(EdU Int. Sum)")
+```
+
+Similarly to what done earlier, plot the fraction of cells in each cell cycle phase for each well.
+
+```{r}
+selected_wells_tbl %>%
+  ggplot(aes(x = well,
+             fill = cc_edu_phase)) +
+  geom_bar(position = "fill") +
+  scale_fill_tableau(name = "Cell Cycle\nPhase") +
+  labs(x = "Well", 
+       y = "Fraction",
+       title = "Cell Cycle DAPI + EdU")
+```
+
+```{r}
+selected_wells_tbl %>%
+  ggplot(aes(x = factor(treat_um),
+             fill = cc_edu_phase)) +
+  geom_bar(position = "fill") +
+  scale_fill_tableau(name = "Cell Cycle\nPhase") +
+  facet_wrap(vars(treat), scales = "free_x") +
+  labs(x = "Treatment Conc. (uM)", 
+       y = "Fraction",
+       title = "Cell Cycle DAPI + EdU")
+```
+
+```{r}
+#| label: session-info
+#| results: markup
+
+sessionInfo()
+```

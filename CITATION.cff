@@ -1,8 +1,9 @@
 cff-version: 1.2.0
-message: "If you use this code, please cite the associated manuscript."
+message: "If you use this code, please cite the associated manuscript and this repository."
 title: "Code for Re-establishment of TAD boundary organization during DNA replication"
 version: "0.1.0"
 date-released: "2026-07-07"
+repository-code: "https://github.com/CBIIT/tad-boundary-replication-analysis"
 authors:
   - family-names: "Busby"
     given-names: "Theodore III"
@@ -45,4 +46,4 @@ preferred-citation:
     - family-names: "Misteli"
       given-names: "Tom"
   year: 2026
-  notes: "Manuscript in preparation/submission. Replace this placeholder with journal, DOI, and final citation when available."
+  notes: "Associated manuscript. Update citation metadata after publication if a DOI becomes available."

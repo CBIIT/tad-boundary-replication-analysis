@@ -1,0 +1,465 @@
+---
+title: "FISH_3D_Distance"
+author: "Gianluca Pegoraro"
+date: "Dec 21, 2015"
+output: html_document
+---
+
+```{r}
+library('plyr')
+library('ggplot2')
+library('stringr')
+library('knitr')
+library('SpatialTools')
+library('reshape2')
+library('data.table')
+```
+
+```{r, include=FALSE, warning=FALSE}
+opts_chunk$set(fig.path='R_Output/', cache = FALSE, cache.path='cache_final/', dev=c("pdf"), dpi = 600, fig.width=15, fig.height=7, message=FALSE, warning=FALSE)
+```
+
+Specify x,y pixel size (microns) and z-step (microns)
+
+```{r setResolution}
+xyres <- 0.1625
+zstep <- 1.0
+```
+
+### Read the Object Level Data
+
+Set RegEx patterns for directory searches for cell level data and spot data in all colors.
+```{r regexFilename, results='hide'}
+pat.c <- ".*Nuclei Selected\\[0\\]\\.txt$" # Pattern for Single Cell data files
+pat.g <- ".*Spots 488\\[1\\]\\.txt$"# Pattern for Single Green Spot data files
+pat.r <- ".*Spots 561\\[3\\]\\.txt$"# Pattern for Single Red Spot data files
+pat.f <- ".*Spots 640\\[2\\]\\.txt$"# Pattern for Single Far Red Spot data files
+```
+
+Create a list of the RegEx patterns set in the previous chunk. **Important:** the list names will be carried over all the next steps!!!
+
+* c = cell level data
+* g = Green Spot data
+* r = Red Spot data
+* f = FarRed Spot data
+
+```{r patList, results = 'hide'}
+pat.list <- list(c= pat.c, g = pat.g, r = pat.r, f = pat.f)
+```
+
+Recursively search the `ObjectLevelData` directory and its subdirectories for files whose name includes the RegEx patterns defined two chunks above. The `path.list` functon outputs absolute file names. `path.list` is a list containing all the filenames on a per cell-level or per color-level (i.e. gr, gf or fr) basis.
+```{r directorySearch, results='hide'}
+list.files <- function(x){
+  dir(path = 'ObjectLevelData/', pattern = x, full.names = TRUE, recursive = TRUE, include.dirs = TRUE)
+}
+
+path.list <- llply(pat.list, list.files) 
+```
+
+Extract file names from absolut path and set them as list element names. 
+```{r trimNames, results='hide'}
+trim.names <- function(x){
+  names(x) <- basename(x) # This assigns the filename to the file that it is read
+  y <- x ## This is necessary because of scoping issues
+}
+
+path.list <- llply(path.list, trim.names) 
+```
+
+Recursively read and merge object level data files as data.frames. Rows are labeled with relative filenames (The `.id` variable). This and the previous chunks are slightly modified tricks adopted from H. Wickam ["Tidy Data" paper](http://vita.had.co.nz/papers/tidy-data.pdf).
+
+```{r readMerge, results='hide'}
+
+read.merge <- function(x){
+  dt <-as.data.table(ldply(x, fread, sep = "\t")) 
+}
+
+dt.list <- llply(path.list, read.merge)
+```
+
+Separate the cell level data from the distance and spot level data.
+
+```{r deleteDtList, results='asis'}
+dt.cell <- dt.list$c
+dt.g <- dt.list$g
+dt.r <- dt.list$r
+dt.f <- dt.list$f
+
+rm(dt.list)
+
+kable(head(dt.g), digits = 2)
+```
+
+### Process the object-level data
+
+Rename the appropriate variables to allow for downstream inner-join operations.
+
+```{r renameVariables}
+setnames(dt.cell, c("PlateName",
+                    "MeasurementDate",
+                    "Row",
+                    "Column",
+                    "Field",
+                    "Object Number",
+                    "X",
+                    "Y",
+                    "Nuclei Selected - Number of Spots",
+                    "Nuclei Selected - Number of Spots (2)",
+                    "Nuclei Selected - Number of Spots (3)"),
+                  c("assay.id",
+                    "timestamp",
+                    "nrow",
+                    "ncol",
+                    "FieldIndex",
+                    "CellIndex",
+                    "x",
+                    "y",
+                    "FarRed_NumberofSpots",
+                    "Red_NumberofSpots",
+                    "Green_NumberofSpots"))
+
+setnames(dt.g,    c("PlateName",
+                    "MeasurementDate",
+                    "Row",
+                    "Column",
+                    "Field",
+                    "Object Number",
+                    "X",
+                    "Y",
+                    "Spots 488 - Z-Plane Mean",
+                    "Spots 488 - Object No in Nuclei Selected population"),
+                  c("assay.id",
+                    "timestamp",
+                    "nrow",
+                    "ncol",
+                    "FieldIndex",
+                    "SpotIndex",
+                    "x",
+                    "y",
+                    "z",
+                    "CellIndex"))
+
+setnames(dt.r,    c("PlateName",
+                    "MeasurementDate",
+                    "Row",
+                    "Column",
+                    "Field",
+                    "Object Number",
+                    "X",
+                    "Y",
+                    "Spots 561 - Z-plane Mean",
+                    "Spots 561 - Object No in Nuclei Selected population"),
+                  c("assay.id",
+                    "timestamp",
+                    "nrow",
+                    "ncol",
+                    "FieldIndex",
+                    "SpotIndex",
+                    "x",
+                    "y",
+                    "z",
+                    "CellIndex"))
+
+setnames(dt.f,    c("PlateName",
+                    "MeasurementDate",
+                    "Row",
+                    "Column",
+                    "Field",
+                    "Object Number",
+                    "X",
+                    "Y",
+                    "Spots 640 - Z-plane Mean",
+                    "Spots 640 - Object No in Nuclei Selected population"),
+                  c("assay.id",
+                    "timestamp",
+                    "nrow",
+                    "ncol",
+                    "FieldIndex",
+                    "SpotIndex",
+                    "x",
+                    "y",
+                    "z",
+                    "CellIndex"))
+```
+
+Add a color index variable to the spot-level data.tables. 
+
+```{r addColorIndex}
+dt.g[, color := "Green"]
+dt.r[, color := "Red"]
+dt.f[, color := "FarRed"]
+```
+
+Transform measurement units for all coordinates. `x`, `y` -> from pixels to microns, `z` -> from plane number to microns. 
+
+```{r dimensionTransform}
+dt.list <- list(g = dt.g, r = dt.r, f = dt.f)
+
+resize <- function(dt){
+    
+    res <- dt[, `:=` (x.mic = x * xyres,
+                      y.mic = y * xyres,
+                      z.mic = z * zstep)]
+}
+
+dt.list <- llply(dt.list, resize)
+```
+
+Set key for all the data.tables based on the `CellIndex`.
+
+```{r setKeys}
+key.set <- function(dt){
+    dt <- setkey(dt, assay.id, timestamp, nrow, ncol, FieldIndex, CellIndex)  
+}
+
+setkey(dt.cell, assay.id, timestamp, nrow, ncol, FieldIndex, CellIndex)
+
+dt.list <- llply(dt.list, key.set)
+```
+
+Add selected Cell-level data to the spot-level tables via an inner-join operation.
+
+```{r innerJoin}
+innerJoin <- function(dt){
+    res <- dt[dt.cell, list(.id, assay.id, timestamp, nrow, ncol, FieldIndex, CellIndex, color, SpotIndex, x, y, z, x.mic, y.mic, z.mic, Green_NumberofSpots, Red_NumberofSpots, FarRed_NumberofSpots), nomatch = 0]
+}
+
+dt.list <- llply(dt.list, innerJoin)
+```
+
+Re-separate the spot-level data.
+
+```{r , results='asis'}
+dt.g <- dt.list$g
+dt.r <- dt.list$r
+dt.f <- dt.list$f
+
+rm(dt.list)
+
+kable(head(dt.g), digits = 2)
+```
+
+
+### Calculate Minimum Distances and Paired Red Spots Events.
+
+```{r}
+dt.gr <- rbindlist(list(dt.g,dt.r))
+setkey(dt.gr, .id, FieldIndex, CellIndex)
+
+dt.fr <- rbindlist(list(dt.r,dt.f))
+setkey(dt.fr, .id, FieldIndex, CellIndex)
+```
+
+Select only Distances from cells that have equal numbers of Red and Green spots. This filtering makes the only assumption that in each cell the FISH should have worked for Green and Red. No assumption is made on the ploidy or phase of the cell cycle of the specific cell.
+
+```{r selectDistances, results= 'hide'}
+dt.gr.sel <- dt.gr[(Green_NumberofSpots > 1 & Red_NumberofSpots > 1) & (Green_NumberofSpots ==  Red_NumberofSpots),]
+dt.fr.sel <- dt.fr[FarRed_NumberofSpots > 1 & Red_NumberofSpots > 1,]
+```
+
+Calculate 2D/3D spot distances.
+
+```{r SpotDist, results='hide'}
+dt.gr.dist.2D <- dt.gr.sel[, melt(dist2(as.matrix(.SD[color == 'Green',list(x.mic,y.mic)]),
+                                   as.matrix(.SD[color == 'Red',list(x.mic,y.mic)])),
+                               value.name = 'gr.SpotDist'),
+                          by = list(assay.id, timestamp, nrow, ncol, FieldIndex, CellIndex)]
+
+setnames(dt.gr.dist.2D, c('Var1','Var2'), c('GreenSpotIndex','RedSpotIndex'))
+
+dt.fr.dist.2D <- dt.fr.sel[, melt(dist2(as.matrix(.SD[color == 'FarRed',list(x.mic,y.mic)]),
+                                   as.matrix(.SD[color == 'Red',list(x.mic,y.mic)])),
+                               value.name = 'fr.SpotDist'),
+                          by = list(assay.id, timestamp, nrow, ncol, FieldIndex, CellIndex)]
+
+setnames(dt.fr.dist.2D, c('Var1','Var2'), c('FarRedSpotIndex','RedSpotIndex'))
+
+
+dt.gr.dist.3D <- dt.gr.sel[, melt(dist2(as.matrix(.SD[color == 'Green',list(x.mic,y.mic,z.mic)]),
+                                   as.matrix(.SD[color == 'Red',list(x.mic,y.mic,z.mic)])),
+                               value.name = 'gr.SpotDist'),
+                          by = list(assay.id, timestamp, nrow, ncol, FieldIndex, CellIndex)]
+
+setnames(dt.gr.dist.3D, c('Var1','Var2'), c('GreenSpotIndex','RedSpotIndex'))
+
+dt.fr.dist.3D <- dt.fr.sel[, melt(dist2(as.matrix(.SD[color == 'FarRed',list(x.mic,y.mic,z.mic)]),
+                                   as.matrix(.SD[color == 'Red', list(x.mic,y.mic,z.mic)])),
+                               value.name = 'fr.SpotDist'),
+                          by = list(assay.id, timestamp, nrow, ncol, FieldIndex, CellIndex)]
+
+setnames(dt.fr.dist.3D, c('Var1','Var2'), c('FarRedSpotIndex','RedSpotIndex'))
+```
+
+Green-Red and Red-FarRed proximity calculations. **Important: this calculations find the closest Green/Red and Red/FarRed  pairs (by calculating the the minimum distance) on a per Red Spot basis**.
+
+```{r proximityR-G, results='hide'}
+setkey(dt.fr.dist.2D, assay.id, timestamp, nrow, ncol, FieldIndex, CellIndex, RedSpotIndex)
+
+dt.fr.min.2D <- dt.fr.dist.2D[, .SD[which.min(fr.SpotDist),], 
+                          by = key(dt.fr.dist.2D)]
+
+setkey(dt.gr.dist.2D, assay.id, timestamp, nrow, ncol, FieldIndex, CellIndex, RedSpotIndex)
+
+dt.gr.min.2D <- dt.gr.dist.2D[, .SD[which.min(gr.SpotDist),], 
+                        by = key(dt.gr.dist.2D)] 
+
+setkey(dt.fr.dist.3D, assay.id, timestamp, nrow, ncol, FieldIndex, CellIndex, RedSpotIndex)
+
+dt.fr.min.3D <- dt.fr.dist.3D[, .SD[which.min(fr.SpotDist),], 
+                          by = key(dt.fr.dist.3D)]
+
+setkey(dt.gr.dist.3D, assay.id, timestamp, nrow, ncol, FieldIndex, CellIndex, RedSpotIndex)
+
+dt.gr.min.3D <- dt.gr.dist.3D[, .SD[which.min(gr.SpotDist),], 
+                        by = key(dt.gr.dist.3D)] 
+```
+
+**Important:** the keys of both `dt.gr.min` and `dt.fr.min` tables are set to the `RedSpotIndex`. The two tables are then inner joined. This means two things:
+
+- All the *Breakage Red* or *Colocalization* events are going to be indexed on a per Red Spot basis
+- Only the subset of Red Spots that have **both**  a Green/Red minimum distance **and** a Red/FarRed minimum distance will be present in the `dt.red.index` table
+
+```{r, mergeTables, results='hide'}
+dt.red.index.2D <- dt.gr.min.2D[dt.fr.min.2D, nomatch = 0]
+dt.red.index.3D <- dt.gr.min.3D[dt.fr.min.3D, nomatch = 0]
+```
+
+### Graphical Exploratory Data Analysis and Calculations
+
+```{r setThemeandPalette, include='false'}
+##' Color-blind friendly palette
+##' From \url{http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/}
+##' @title Color-blind friendly palette
+##' @param palette Choose "cb", "rcb", or "bly". cb is the Winston
+##' Chang color blind palette; rcb is that palette in reverse; bly
+##' puts the yellow and blue in the palette first.
+##' @return Variations on an eight-color color-blind friendly palette.
+##' @author Winston Chang / Kieran Healy
+##' @export
+
+my.colors <- function(palette="cb"){
+  ### The palette with grey:
+  cb.palette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+  ## Same one Reversed
+  rcb.palette <- rev(cb.palette)
+  ## Blue and yellow first choices
+  bly.palette <- c("#E69F00", "#0072B2", "#999999", "#56B4E9", "#009E73", "#F0E442", "#D55E00", "#CC79A7")
+  if (palette=="cb") return(cb.palette) else if (palette=="rcb") return(rcb.palette) else if (palette=="bly") return(bly.palette) else stop("Choose cb, rcb, or bly only.")
+}
+
+theme_set(theme_minimal())
+```
+
+First of all, some quality control on the spot numbers.
+```{r gSpotsNumber, echo=FALSE, fig.width = 12}
+    
+g.spots <- ggplot(dt.cell, aes(x = Green_NumberofSpots, y = ..density..)) 
+
+g.spots        + geom_histogram(fill = "#56B4E9", color = "#999999", binwidth = 1) + 
+                 ylab('Density') + 
+                 coord_cartesian(xlim = c(-1,8)) +
+                 scale_x_continuous(breaks = 0:8) +
+                 xlab('Number of Green FISH Signals per Cell') + 
+                 facet_wrap(~ WellName) 
+```
+
+```{r rSpotsNumber, echo=FALSE, fig.height = 6}
+
+r.spots <- ggplot(dt.cell, aes(x = Red_NumberofSpots, y = ..density..)) 
+
+r.spots        + geom_histogram(fill = "#56B4E9", color = "#999999", binwidth = 1) + 
+                 ylab('Density') + 
+                 coord_cartesian(xlim = c(-1,8)) +
+                 scale_x_continuous(breaks = 0:8) +
+                 xlab('Number of Red FISH Signals per Cell') + 
+                 facet_wrap(~ WellName)      
+```
+
+```{r fSpotsNumber, echo=FALSE, fig.height = 6}
+f.spots <- ggplot(dt.cell, aes(x = FarRed_NumberofSpots, y = ..density..)) 
+
+f.spots +        geom_histogram(fill = "#56B4E9", color = "#999999", binwidth = 1) + 
+                 coord_cartesian(xlim = c(-1,8)) +
+                 scale_x_continuous(breaks = 0:8) +
+                 xlab('Number of FarRed FISH Signals per Cell') + 
+                 facet_wrap(~ WellName)
+```
+
+An experimentally set spot proximity threshold is set.
+```{r thresholdSet}
+thres <- 1.25 # The threshold can be changed here
+```
+
+This a histogram for the Red/Green minimum distance on a per red spot basis. The dotted red lines represent the `r thres` in uM.
+
+```{r grHist2D,  echo=FALSE, fig.height = 6}
+gr.hist2D <- ggplot(dt.red.index.2D, aes(x = gr.SpotDist, y = ..density..)) 
+
+
+gr.hist2D + geom_histogram(fill = "#56B4E9", color = "#999999", binwidth = 0.25) + 
+            ylab('Density') + 
+            facet_grid(ncol ~ nrow) + 
+            geom_vline(xintercept = thres, color = 'red', linetype = 'longdash') + 
+            coord_cartesian(xlim = c(-1, 5)) +
+            xlab('2D Green/Red distance (um)')
+```
+
+```{r grHist3D,  echo=FALSE, fig.height = 6}
+gr.hist3D <- ggplot(dt.red.index.3D, aes(x = gr.SpotDist, y = ..density..)) 
+
+
+gr.hist3D + geom_histogram(fill = "#56B4E9", color = "#999999", binwidth = 0.25) + 
+            ylab('Density') + 
+            facet_grid(ncol ~ nrow) + 
+            geom_vline(xintercept = thres, color = 'red', linetype = 'longdash') +
+            coord_cartesian(xlim = c(-1, 5)) +
+            xlab('3D Green/Red distance (um)')
+```
+
+This a histogram for the Red/FarRed minimum distance on a per red spot basis.
+
+```{r frHist2D, echo=FALSE, fig.height = 6}
+fr.hist.2D <- ggplot(dt.red.index.2D, aes(x = fr.SpotDist, y = ..density..))
+
+fr.hist.2D +  geom_histogram(fill = "#56B4E9", color = "#999999", binwidth = 0.25) + 
+              ylab('Density') + 
+              xlab('Red/FarRed Minimum Distance (um)') + 
+              facet_grid(ncol ~ nrow) + 
+              coord_cartesian(xlim = c(-1, 5)) +
+              geom_vline(xintercept = thres, color = 'red', linetype = 'longdash') +
+              xlab('2D FarRed/Red distance')
+```
+
+```{r frHist3D, echo=FALSE, fig.height = 6}
+fr.hist.3D <- ggplot(dt.red.index.3D, aes(x = fr.SpotDist, y = ..density..))
+
+fr.hist.3D +  geom_histogram(fill = "#56B4E9", color = "#999999", binwidth = 0.25) + 
+              ylab('Density') + 
+              xlab('Red/FarRed Minimum Distance (um)') + 
+              facet_grid(ncol ~ nrow) + 
+              coord_cartesian(xlim = c(-1, 5)) +
+              geom_vline(xintercept = thres, color = 'red', linetype = 'longdash') +
+              xlab('3D FarRed/Red distance')
+```
+
+```{r spotMap}
+all.colors <- rbindlist(list(dt.g, dt.r, dt.f))
+
+all.colors <- all.colors[, color := factor(color, levels = c('Green',
+                                                             'Red',
+                                                             'FarRed'))]
+
+spot.map <-  ggplot(all.colors[FieldIndex == 2,], aes(x = x, y = y, color = color)) 
+
+spot.map  +   geom_point(size = 0.75) +
+              scale_color_manual(values = c('Green', 'Red', 'Blue')) +
+              facet_grid(nrow ~ ncol) +
+              scale_y_reverse()
+
+```
+
+
+Document the information about the analysis session
+```{r sessionInfo, include=TRUE, echo=TRUE, results='markup'}
+sessionInfo()
+```

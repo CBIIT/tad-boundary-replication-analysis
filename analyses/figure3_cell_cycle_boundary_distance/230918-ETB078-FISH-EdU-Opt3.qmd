@@ -1,0 +1,539 @@
+---
+title: "Cell Cycle Arrest Experiment Optimization"
+author: "Theodore Busby/Gianluca Pegoraro"
+date: today
+date-format: long
+format: 
+  html:
+      self-contained: true
+      code-fold: true
+      code-tools: true
+      code-link: true
+editor: source
+---
+
+```{r}
+#| label: load-packages
+#| include: false
+#| warning: false
+
+library(tidyverse)
+library(fs)
+library(data.table)
+library(ggthemes)
+library(mclust)
+library(SpatialTools)
+library(paint)
+source("funcs/plotting.R")
+```
+
+```{r}
+#| label: set-theme
+#| include: false
+
+theme_set(theme_bw())
+theme_update(
+  axis.text.x = element_text(
+    angle = -45,
+    hjust = 0,
+    vjust = 0.5
+  ),
+  axis.text.y = element_text(hjust = 0)
+)
+```
+
+### Image acquisition and analysis conditions
+
+-   Microscope: CV8000
+-   Objective: 60X water
+-   Binning: 1X1
+-   Image Analysis Software: HiTIPS v?
+
+### Read Experimental Metadata
+
+Read plate layout with experimental treatments.
+
+```{r}
+#| label: read-plate-layout
+sync_levs <- c("Cycling")
+
+plate_layout <- read_csv("metadata/plate_layout.csv",
+  show_col_types = F
+) |>
+  mutate(sync = factor(sync, levels = sync_levs),
+         across(c(row, column), as.integer)) |>
+  filter(!is.na(sync))
+
+paint(plate_layout)
+```
+
+Generate layout for the `sync` variable.
+
+```{r}
+#| label: sync-layout
+
+plot_heatmap(
+  table = plate_layout,
+  property = sync,
+  discrete_property = TRUE,
+  legend = "Cell Cycle\nPhase",
+  title = "Synchronization"
+)
+```
+
+### Read single cell data
+
+Read the single cell data from HiTIPS and rename some variables. Also, log2 transform the `DAPI Int. Sum` and `EdU Int. Sum values`. This shrink the dispersion of the 2N and 4N peaks for DAPI. Similarly, the log transform and helps separating EdU- from EdU+ nuclei. Then merge with experimental plate layouts and filter out small and irregular nuclei.
+
+```{r}
+#| label: read-cell-data
+
+xy_res <- 0.108
+z_step <- 0.3
+
+cell_tbl <- dir_info("data/",
+  recurse = T,
+  glob = "*nuclei_information_well*.csv"
+) |>
+  filter(size > "1K") |>
+  rowwise() |>
+  reframe(path, fread(path)) |>
+  select(
+    file_name = Experiment,
+    column,
+    row,
+    field_index,
+    time_point,
+    cell_index,
+    nuc_area = area,
+    solidity,
+    dapi_int_mean = mean_intensity,
+    edu_int_sum = ch4_sum_intensity,
+    edu_int_mean = ch4_mean_intensity) |>
+  mutate(
+    well = paste0(LETTERS[row], column),
+    across(c(row, column), as.integer),
+    #convert area from microns sq. to pixels
+    nuc_area_px = nuc_area / (xy_res^2),
+    #calculate int sum from int mean and area pixels
+    dapi_int_sum = dapi_int_mean * nuc_area_px,
+    dapi_int_sum_log2 = log2(dapi_int_sum + 1),
+    edu_int_sum_log2 = log2(edu_int_sum + 1)
+  ) |>
+  # join the meatadata layout table
+  inner_join(plate_layout, by = c("row", "column")) |>
+  select(
+    file_name,
+    well,
+    row,
+    column,
+    field_index,
+    time_point,
+    sync,
+    cell_index,
+    nuc_area,
+    nuc_area_px,
+    solidity,
+    dapi_int_mean,
+    dapi_int_sum,
+    dapi_int_sum_log2,
+    edu_int_mean,
+    edu_int_sum,
+    edu_int_sum_log2
+  ) |>
+  arrange(
+    column, row, field_index,
+    time_point, cell_index
+  ) |>
+  # eliminate small and irregularly shaped nuclei
+  filter(
+    nuc_area >= 30,
+    solidity > 0.875
+  )
+
+paint(cell_tbl)
+```
+
+### Read single spot level data
+
+Read and process the spot level data. Convert the x, y and z coordinates to microns (They were originally calculated in pixels) and filter spots that do not belong to any nucleus. These have a `cell_index` value of `0`.
+
+```{r}
+#| label: read-spot-data
+
+spot_tbl <- dir_info("data", 
+       recurse = T, 
+       glob = "*spots_locations_well*.csv") |>
+  filter(size > "1K") |>
+  rowwise() |>
+  reframe(path, fread(path)) |>
+  rename(spot_index = V1,
+         x = x_location,
+         y = y_location,
+         z = z_location) |>
+  #conversion from pixels to microns
+  mutate(well = paste0(LETTERS[row], column),
+         across(x:y, list(mic = ~ .x * xy_res)),
+         z_mic = z * z_step) |>
+  select(well, column, row, field_index,
+         time_point, cell_index, spot_index, 
+         channel, x:z_mic) |>
+  #filter spots not in the nucleus
+  filter(cell_index != 0) |>
+  arrange(well, column, row, field_index,
+          time_point, cell_index, channel)
+
+paint(spot_tbl)
+```
+
+Use the `spot_tbl` to calculate the number of spots per cell in each color.
+
+```{r}
+#| label: calc-n-spots
+
+cell_n_spots_tbl <- spot_tbl |>
+  group_by(well, column, row, field_index,
+           time_point, cell_index, channel) |>
+  count() |>
+  pivot_wider(names_from = channel,
+              names_prefix = "n_spots_channel_",
+              values_from = n,
+              values_fill = 0)
+
+paint(cell_n_spots_tbl)
+```
+
+### Spots per cell plots
+
+```{r}
+#| label: n-green-spots
+
+cell_n_spots_tbl |>
+  ggplot(aes(x = n_spots_channel_2,
+             y = after_stat(density))) +
+  geom_histogram(binwidth = 1,
+                 fill = "navy",
+                 color = "grey70") +
+  scale_x_continuous(breaks = 0:5) +
+  coord_cartesian(xlim = c(-1, 5)) +
+  facet_grid(vars(row), vars(column)) +
+  xlab("Number of Green Spots per Cell") +
+  ggtitle("Green Spots") 
+```
+
+```{r}
+#| label: n-red-spots
+
+cell_n_spots_tbl |>
+  ggplot(aes(x = n_spots_channel_3,
+             y = after_stat(density))) +
+  geom_histogram(binwidth = 1,
+                 fill = "navy",
+                 color = "grey70") +
+  scale_x_continuous(breaks = 0:5) +
+  coord_cartesian(xlim = c(-1, 5)) +
+  facet_grid(vars(row), vars(column)) +
+  xlab("Number of Red Spots per Cell") +
+  ggtitle("Red Spots") 
+```
+
+### Spot Filtering
+
+Filter cells that have 2 spots or more in both the 488 and 561 channels.
+
+```{r}
+cell_n_spots_filt_tbl <- cell_n_spots_tbl |>
+  semi_join(cell_tbl, by = c("well", "row", "column", "field_index",
+                             "time_point", "cell_index")) |>
+          filter(n_spots_channel_2 > 1 & n_spots_channel_2 == n_spots_channel_3)
+
+paint(cell_n_spots_filt_tbl)
+```
+
+Filter out spots that do not belong to the correct population of cells obtained in the previous chunk.
+
+```{r}
+spot_filt_tbl <- spot_tbl |> 
+  semi_join(cell_n_spots_filt_tbl, 
+            by = c("well", "column", "row", "field_index",
+                   "time_point", "cell_index")) |>
+  left_join(plate_layout, by = c("row", "column")) |>
+  data.table()
+  
+paint(spot_filt_tbl)
+```
+
+### Red/FarRed Spot Distances Calculations
+
+Calculate 2D spot distances.
+
+```{r}
+#| label: calc-green-red-dist
+
+gr_dist_2D <-
+  spot_filt_tbl[channel %in% 2:3, # Only  Green and Red spots
+                reshape2::melt(dist2(as.matrix(.SD[channel == 2,
+                                                   list(x_mic, y_mic)]),
+                                     as.matrix(.SD[channel == 3,
+                                                   list(x_mic, y_mic)])),
+                               value.name = "gr_dist"),
+                by = list(well,
+                          row,
+                          column,
+                          sync,
+                          field_index,
+                          time_point,
+                          cell_index)]
+
+setnames(gr_dist_2D, c("Var1", "Var2"), c("g_index", "r_index"))
+
+
+paint(gr_dist_2D)
+```
+
+Green-Red proximity calculations. **Important: this calculations find the closest Green/Red pairs (by calculating the the minimum distance) on a per Red Spot basis**.
+
+```{r}
+#| label: calc-min-dist
+
+setkey(
+  gr_dist_2D,
+  well,
+  row,
+  column,
+  sync,
+  field_index,
+  time_point,
+  cell_index,
+  r_index
+)
+
+gr_dist_min_2D <- gr_dist_2D[, .SD[which.min(gr_dist), ],
+                             by = key(gr_dist_2D)]
+```
+
+Calculate number of cells per well. Also calculate mean and median per well for all properties.
+
+```{r}
+#| label: summarize-wells
+
+well_tbl <- cell_tbl |>
+  summarise(
+    cell_n = n(),
+    across(
+      nuc_area:edu_int_sum_log2,
+      list(
+        mean = ~ mean(.x, na.rm = T),
+        median = ~ median(.x, na.rm = T)
+      )
+    ),
+    .by = c(
+      file_name,
+      well,
+      row,
+      column,
+      sync
+    )
+  )
+
+paint(well_tbl)
+```
+
+Write per well values to disk.
+
+```{r}
+write_csv(well_tbl, "output/per_well_measurements.csv")
+```
+
+### DAPI Histograms
+
+```{r}
+#| label: dapi-histogram
+
+cell_tbl |>
+  plot_histogram(
+    property = dapi_int_sum_log2,
+    property_legend = "Log2(Dapi Int. Sum)",
+    bin_width = 0.1,
+    limits = c(23, 26),
+    title = "DAPI Histograms"
+  )
+```
+
+### DAPI Cell Cycle Normalization
+
+It is pretty normal that the position of the G1 peak on the x-axis is translated well to well. The overall shape of the histogram does not change. Past experiments showed that there is not much
+
+Write a function to fit two distributions to the `2N` and `4N` peaks to find their position (i.e. the mean of the distribution) in a vector of DAPI Int. Sum values. Always return minimum value of 2-component GMM fit (just in case the means aren't sorted).
+
+```{r}
+G1_peakfinder_Mclust <- function(data, nComponents = 2) {
+  mixi <- Mclust(data = data, G = nComponents)
+  min(mixi$parameters$mean)
+}
+```
+
+Apply the function to each of the well cells to find the G1 peak in each of them. Then set the G1 (2N) peak to 1 and normalize all the other log2(DAPI Int. Sum) values accordingly. Since, these is a log2 scale a difference of 1 corresponds to a 2-fold difference on a linear scale. For this reason, the G2 (4N) peak should fall around 2. however, previous work from the lab (Zane et al., Mol. Cell. Biol., 2018) showed that the position of the G2 peak calculated this way is slightly lower, \~ 1.8 - 1.9.
+
+```{r}
+#| message: false
+
+cell_tbl_norm <- cell_tbl |>
+  # Do not consider cells with extreme values to avoid
+  # spurious peaks
+  filter(dplyr::between(dapi_int_sum_log2 , 23, 26)) |>
+  group_by(row, column, well) |>
+  mutate(
+    g1_peak = G1_peakfinder_Mclust(dapi_int_sum_log2),
+    dapi_int_sum_log2_norm := dapi_int_sum_log2 - g1_peak + 1
+  )
+
+```
+
+```{r}
+paint(cell_tbl_norm)
+```
+
+```{r}
+#| label: cc-norm
+#| fig.width: 12
+#| fig.height: 9
+
+cell_tbl_norm |>
+  plot_histogram(
+    property = dapi_int_sum_log2_norm,
+    property_legend = "Log2(Dapi Int. Sum) Norm.",
+    bin_width = 0.1,
+    limits = c(0, 3),
+    title = "Selected Wells Cell Cycle Normalized"
+  )
+```
+
+### DAPI and EdU Cell Cycle Normalization
+
+Plot the Dapi Int. Sum vs. the EdU Int. Sum.
+
+```{r}
+#| label: cc-dot-plot
+#| fig.width: 12
+#| fig.height: 9
+
+cell_tbl_norm |>
+  ggplot(aes(x = dapi_int_sum_log2_norm,
+             y = edu_int_sum_log2)) +
+  geom_point(shape = 21,
+             size = 0.2) +
+  coord_cartesian(xlim = c(0, 3)) +
+  facet_grid(vars(row), vars(column)) +
+  labs(x = "Log2(Dapi Int. Sum) Norm.",
+       y = "Log2(EdU Int. Sum)")
+```
+
+As expected, there is a population cells between Log2(Dapi Int. Sum) Norm. values of 1 and 2 that is strongly positive for the EdU staining. These are likely S phase cells. Based on this observation, assign cell cycle phases taking into account both Log2(Dapi Int. Sum) Norm. and Log2(Edu Int. Sum) values:
+
+-   DAPI below 0.5: Sub G1
+
+-   DAPI between 0.5 and 1.5 AND EdU less than 22: G1
+
+-   DAPI between 0.5 and 2.25 AND EdU more than 22: S
+
+-   DAPI between 1.5 and 2.25 AND EdU less than 22: G2/M
+
+-   DAPI above 2.25: \> 4N
+
+```{r}
+cc_phases <- c("SubG1", "G1", "S", "G2_M", ">4N")
+
+cell_tbl_norm <- cell_tbl_norm |>
+  mutate(cc_edu_phase = factor(case_when(
+    dapi_int_sum_log2_norm <= 0.5 ~ "SubG1",
+    dapi_int_sum_log2_norm <= 1.5 & edu_int_sum_log2 <= 22 ~ "G1",
+    dapi_int_sum_log2_norm <= 2.25 & edu_int_sum_log2 > 22 ~ "S",
+    dapi_int_sum_log2_norm <= 2.25 & edu_int_sum_log2 <= 22 ~ "G2_M",
+    TRUE ~ ">4N"
+  ),
+  levels = cc_phases))
+
+paint(cell_tbl_norm)
+```
+
+Plot again DAPI vs. EdU for each cell, but this time also color dots based on the assigned cell cycle phase according to this new criterion.
+
+```{r}
+#| label: cc-phases-dotplot
+#| fig.width: 12
+#| fig.height: 9
+
+cell_tbl_norm |>
+  ggplot(aes(x = dapi_int_sum_log2_norm,
+             y = edu_int_sum_log2,
+             color = cc_edu_phase)) +
+  geom_point(shape = 21,
+             size = 0.5) +
+  coord_cartesian(xlim = c(0, 3)) +
+  scale_color_tableau(name = "Cell Cycle\nPhase") +
+  facet_grid(vars(row), vars(column)) +
+  labs(x = "Log2(Dapi Int. Sum) Norm.",
+       y = "Log2(EdU Int. Sum)")
+```
+
+```{r}
+#| label: cc-phases-perc-bar
+
+cell_tbl_norm |>
+  ggplot(aes(x = well,
+             fill = cc_edu_phase)) +
+  geom_bar(position = "fill") +
+  scale_fill_tableau(name = "Cell Cycle\nPhase") +
+  labs(x = "Well", 
+       y = "Fraction",
+       title = "Cell Cycle DAPI + EdU")
+```
+
+### CC Phase FISH Spot-to-Spot distances
+
+Carry over the CC phasing information from the cell-level table to the Gree/Red distance table.
+
+```{r}
+gr_dist_min_2D_cc <- gr_dist_min_2D |>
+  left_join(cell_tbl_norm,
+            by = c("well", "row", "column", "field_index", "time_point",
+                   "cell_index")) |>
+  select(well:gr_dist, cc_edu_phase)
+
+paint(gr_dist_min_2D_cc)
+```
+
+Count the number of distances in the table that do not have a cell cycle phasing label.
+
+```{r}
+gr_dist_min_2D_cc |>
+  summarise(n_NAs = sum(is.na(cc_edu_phase)))
+```
+
+Plot the Green/Red distances split by cell cycle phase.
+
+```{r}
+#| label: cc-fish-dist
+#| fig.width: 12
+#| fig.height: 9
+
+gr_dist_min_2D_cc |>
+  filter(cc_edu_phase %in% c("G1", "S", "G2_M")) |>
+  ggplot(aes(x = gr_dist,
+             color = cc_edu_phase)) +
+  geom_density() +
+  coord_cartesian(xlim = c(0, 2)) +
+  scale_color_tableau(name = "Cell Cycle\nPhase") +
+  facet_wrap(vars(well), ncol = 3) +
+  labs(x = "Green/Red Distance (Microns)", 
+       y = "Density",
+       title = "Green/Red Dist by CC Phase")
+```
+
+```{r}
+#| label: session-info
+#| results: markup
+
+sessionInfo()
+```

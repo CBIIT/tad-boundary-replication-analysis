@@ -1,6 +1,6 @@
 # FISH distance analysis workflow
 
-The uploaded notebooks follow a consistent workflow for measuring TAD boundary distances from high-throughput FISH data.
+The included notebooks follow a consistent workflow for measuring TAD boundary distances from high-throughput DNA FISH data.
 
 ## Core distance workflow
 
@@ -33,8 +33,8 @@ The uploaded notebooks follow a consistent workflow for measuring TAD boundary d
    - This nearest-neighbor value is used as the paired TAD boundary distance.
 
 7. **Summarize and plot**
-   - Plot histograms/densities of spot counts and boundary distances.
-   - Summarize measurements per well or per treatment/sgRNA target.
+   - Plot histograms and density distributions of spot counts and boundary distances.
+   - Summarize measurements per well, treatment, or sgRNA target.
 
 ## Figure 3 cell-cycle workflow
 

@@ -16,7 +16,7 @@ Main notebook:
 
 ### Required raw data
 
-The notebook expects a `data/` folder containing HiTIPS CSV exports. This folder was not present in the uploaded archive.
+The notebook expects a `data/` folder containing HiTIPS CSV exports. These large object-level exports are not tracked in this code repository.
 
 Required recursive file patterns:
 
@@ -96,9 +96,19 @@ Main notebook:
 210521-MiniScreen.Rmd
 ```
 
-The raw Columbus exports were included in the uploaded archive and are retained in this repository.
+The Columbus exports for this analysis are tracked as a compressed archive:
 
-Required recursive file patterns:
+```text
+analyses/miniscreen_pilot/data_raw/miniscreen_columbus_exports.zip
+```
+
+Unpack before rendering:
+
+```bash
+Rscript scripts/unpack_packaged_data.R miniscreen
+```
+
+Required recursive file patterns after unpacking:
 
 ```text
 data/*Nuclei Final[0].txt
@@ -122,4 +132,4 @@ The mini-screen notebook filters to cells with exactly three green spots and thr
 
 ## Raw image data
 
-Raw microscopy images were not present in the uploaded archives. The manuscript draft's Data Availability section noted that images should be hosted in an image repository. Add the final image repository DOI/accession to the root `README.md` before public release.
+Raw microscopy images are not stored in this code repository. This repository is designed to hold analysis code, small tables, metadata, rendered reports, and packaged object-level exports needed by the included notebooks.

@@ -1,6 +1,6 @@
 # Software environment
 
-Each analysis folder keeps its own `renv.lock` from the uploaded source archive. Restore environments from the corresponding folder rather than from the repository root.
+Each analysis folder keeps its own `renv.lock`. Restore the environment from the corresponding folder rather than from the repository root.
 
 ## `analyses/figure3_cell_cycle_boundary_distance/renv.lock`
 
@@ -52,5 +52,6 @@ Rscript -e 'install.packages("renv"); renv::restore()'
 
 ## Notes
 
-- The manuscript Methods draft states that R 4.3.3 was used for exported HiTIPS CSV analysis, while the uploaded Figure 3 lockfile records R 4.3.1. Confirm the intended final environment before submission.
-- The mini-screen notebook was developed with an older R/tidyverse environment; restoring from `renv.lock` is the safest way to reproduce it.
+- Restoring from `renv.lock` is recommended for exact reproduction.
+- The mini-screen notebook was developed with an older R/tidyverse environment; newer dplyr or ggplot2 versions may emit compatibility warnings.
+- Machine-specific package libraries under `renv/library/` are intentionally not tracked. They are recreated by `renv::restore()`.
